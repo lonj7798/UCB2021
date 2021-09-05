@@ -46,7 +46,7 @@ def picky_piggy(score):
         return 7
     
     decimal_position = 10 ** score
-    final_score = int(1 / 7 * decimal_position % 10)
+    final_score = int(decimal_position / 7) % 10
     
     return final_score
     
@@ -86,7 +86,11 @@ def hog_pile(player_score, opponent_score):
     opponent_score: The total score of the other player.
     """
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    
+    if opponent_score == player_score:
+        return player_score
+    else:
+        return 0
     # END PROBLEM 4
 
 
@@ -125,11 +129,25 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    
+    while 1:
+        score0 += take_turn(strategy0(score0, score1), score1, dice, goal)
+        score0 += hog_pile(score0, score1)
+        if score0 >= goal:
+            break
+            
+        # who = next_player(w ho)
+        score1 += take_turn(strategy1(score1, score0), score0, dice, goal)
+        score1 += hog_pile(score1, score0)
+        if score1 >= goal:
+            break
+
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+    
+    
+    
     # END PROBLEM 6
     return score0, score1
 
