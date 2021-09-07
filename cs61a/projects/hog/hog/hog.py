@@ -45,11 +45,17 @@ def picky_piggy(score):
     if score == 0:
         return 7
     
-    decimal_position = 10 ** score
+    # decimal_position = 10 ** score
+    # final_score = int(decimal_position / 7) % 10
+    # return final_score
+    
+    # decimal7 = [1,4,2,8,5,7]
+    # return decimal7[score % 6 - 1]
+    
+    decimal_position = 10 ** (score % 6 if score % 6 else 6)
     final_score = int(decimal_position / 7) % 10
-    
     return final_score
-    
+
     # END PROBLEM 2
 
 
@@ -130,23 +136,26 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     
+    
     while 1:
         score0 += take_turn(strategy0(score0, score1), score1, dice, goal)
         score0 += hog_pile(score0, score1)
+        say = say(score0, score1)
+        
         if score0 >= goal:
             break
             
         # who = next_player(w ho)
         score1 += take_turn(strategy1(score1, score0), score0, dice, goal)
         score1 += hog_pile(score1, score0)
+        say = say(score0, score1)
+        
         if score1 >= goal:
             break
 
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
-    
-    
     
     # END PROBLEM 6
     return score0, score1
@@ -225,7 +234,32 @@ def announce_highest(who, last_score=0, running_high=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    
+
+    def announce(score0, score1):
+        if who == 0:
+            score_gap = score0 - last_score
+            
+            if score_gap > running_high:
+                print(score_gap, "point(s)! That's a record gain for Player", str(who)+"!")
+                
+                return announce_highest(who, score0, score_gap)
+            
+            return announce_highest(who, score0, running_high)
+            
+        else:
+            score_gap = score1 - last_score
+            
+            if score_gap > running_high:
+                print(score_gap, "point(s)! That's a record gain for Player", str(who)+"!")
+                
+                return announce_highest(who, score1, score_gap)
+                
+            return announce_highest(who, score1, running_high)
+    
+    return announce# (whom, last_score, running_hihg)
+    
+    
     # END PROBLEM 7
 
 
@@ -265,7 +299,16 @@ def make_averaged(original_function, trials_count=1000):
     3.0
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    
+    def find_average(*args):
+        total = 0
+        for i in range(trials_count):
+            total += original_function(*args)
+
+        return total / trials_count
+    
+    return find_average
+    
     # END PROBLEM 8
 
 
