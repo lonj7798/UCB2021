@@ -24,10 +24,10 @@ def roll_dice(num_rolls, dice=six_sided):
     
     sum_dice = []
     
-    for i in range(num_rolls):
+    for i in range(num_rolls): # save the rolled dice
         sum_dice += [dice()]
         
-    for i in range(num_rolls):
+    for i in range(num_rolls): # check 1
         if sum_dice[i] == 1:
             return 1
         
@@ -42,7 +42,7 @@ def picky_piggy(score):
     score:  The opponent's current score.
     """
     # BEGIN PROBLEM 2
-    if score == 0:
+    if score == 0: # return 7 when oppent's score is 0
         return 7
     
     # decimal_position = 10 ** score
@@ -134,7 +134,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     say:        The commentary function to call at the end of the first turn.
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
-    # BEGIN PROBLEM 5
+    # BEGIN PROBLEM 5, 6
     
     
     while 1:
@@ -153,7 +153,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         if score1 >= goal:
             break
 
-    # END PROBLEM 5
+    # END PROBLEM 5, 6
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
     
@@ -322,7 +322,23 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     1
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    
+    max_num = 0
+    num_dice = 0 # return value
+    
+    for i in range(1, 11):
+        total_dice_sum = 0
+        # print("ii", i)
+        for j in range(trials_count):
+            total_dice_sum += roll_dice(i, dice)
+
+        if total_dice_sum / trials_count > max_num:
+            max_num = total_dice_sum / trials_count
+            num_dice = i
+            # print("here")
+            
+    return num_dice
+    
     # END PROBLEM 9
 
 
@@ -363,7 +379,12 @@ def picky_piggy_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     returns NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Remove this line once implemented.
+    # def picky_piggy(score):
+    
+    if cutoff <= picky_piggy(opponent_score):
+        return 0
+    
+    return num_rolls
     # END PROBLEM 10
 
 
@@ -373,7 +394,14 @@ def hog_pile_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it returns NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Remove this line once implemented.
+    
+    score += picky_piggy(opponent_score)
+    
+    if (hog_pile(score, opponent_score) >= cutoff) | (picky_piggy(opponent_score) >= cutoff):
+        return 0
+    
+    return num_rolls
+
     # END PROBLEM 11
 
 
