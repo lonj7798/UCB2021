@@ -1,7 +1,0 @@
-'summation-correct', (0, 70)
-'couple-correct', (512, 70)
-'paths-correct', (1024, 70)
-'pascal-correct', (1536, 70)
-'Self-Reference-correct', (2048, 70)
-'coords-correct', (2560, 70)
-'riffle-correct', (3072, 70)
