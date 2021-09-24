@@ -30,7 +30,18 @@ def choose(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    
+    temp = []
+    
+    for paragraph in paragraphs:
+        if select(paragraph):
+            temp.append(paragraph)
+    
+    if k >= len(temp):
+        return ""
+    
+    return temp[k]
+
     # END PROBLEM 1
 
 
@@ -49,7 +60,18 @@ def about(topic):
     """
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    def compare(string):
+        string = string.split(' ')
+        # string = split(string)
+        for word in string:
+            for compare in topic:
+                temp = ''.join(x for x in word if x.isalnum()) # remove the special characters
+                if temp.lower() == compare:
+                    return True
+        return False
+            
+    
+    return compare    
     # END PROBLEM 2
 
 
@@ -79,7 +101,42 @@ def accuracy(typed, reference):
     typed_words = split(typed)
     reference_words = split(reference)
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    typed_len = len(typed_words)
+    reference_len = len(reference_words)
+    error_count = 0
+    
+    if typed_len == reference_len:
+        if not typed_words: # if both of strings are empty
+            return 100.0
+        
+        for i in range(typed_len):
+            if typed_words[i] != reference_words[i]:
+                error_count += 1
+                
+        if error_count == 0:
+            return 100.0
+
+        return 100 - error_count / typed_len * 100
+
+    elif typed_len > reference_len:
+        if not reference_len:
+            return 0.0
+        
+        for i in range(reference_len):
+            if typed_words[i] != reference_words[i]:
+                error_count += 1
+
+        return 100 - (typed_len - reference_len + error_count) / typed_len * 100
+    
+    else:
+        if not typed_len:
+            return 0.0
+        
+        for i in range(typed_len):
+            if typed_words[i] != reference_words[i]:
+                error_count += 1
+                
+        return (typed_len - error_count) / typed_len * 100
     # END PROBLEM 3
 
 
@@ -97,7 +154,9 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    
+    return len(typed) * 12 / elapsed # len(typed) / 5 / (elapsed / 60)
+
     # END PROBLEM 4
 
 
@@ -124,7 +183,21 @@ def autocorrect(typed_word, valid_words, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    
+    diff = []
+    for word in valid_words:
+        if word == typed_word:
+            return word
+        
+        diff.append(diff_function(typed_word, word, limit))
+    
+       
+    if min(diff) <= limit:
+        return valid_words[diff.index(min(diff))]
+    
+    else:
+        return typed_word
+    
     # END PROBLEM 5
 
 
@@ -151,7 +224,20 @@ def feline_flips(start, goal, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    
+    def count_error(start, goal):
+        if not start or not goal:
+            return len(start) + len(goal)
+
+        elif start[0] != goal[0]:
+            return count_error(start[1:], goal[1:]) + 1
+
+        return count_error(start[1:], goal[1:])
+    
+    num_error = count_error(start, goal)
+    if num_error > limit:
+        return limit * 10
+    return num_error
     # END PROBLEM 6
 
 
