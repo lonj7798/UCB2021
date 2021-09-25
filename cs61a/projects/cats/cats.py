@@ -65,7 +65,7 @@ def about(topic):
         # string = split(string)
         for word in string:
             for compare in topic:
-                temp = ''.join(x for x in word if x.isalnum()) # remove the special characters
+                temp = ''.join(x for x in word if x.isalnum()) # remove the special characters, try to use remove_punctuation
                 if temp.lower() == compare:
                     return True
         return False
