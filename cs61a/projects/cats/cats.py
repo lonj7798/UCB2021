@@ -225,19 +225,19 @@ def feline_flips(start, goal, limit):
     """
     # BEGIN PROBLEM 6
     
-    def count_error(start, goal):
-        if not start or not goal:
-            return len(start) + len(goal)
-
-        elif start[0] != goal[0]:
-            return count_error(start[1:], goal[1:]) + 1
-
-        return count_error(start[1:], goal[1:])
+    if start == goal:
+        return 0
     
-    num_error = count_error(start, goal)
-    if num_error > limit:
-        return limit * 10
-    return num_error
+    if limit < 0:
+        return 9999
+    
+    elif not start or not goal:
+        return abs(len(start) - len(goal)) # length difference
+
+    elif start[0] != goal[0]:
+        return feline_flips(start[1:], goal[1:], limit - 1) + 1 # Substitute
+   
+    return feline_flips(start[1:], goal[1:], limit)
     # END PROBLEM 6
 
 
