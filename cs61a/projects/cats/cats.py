@@ -30,12 +30,14 @@ def choose(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
-    
+    """
     temp = []
     
     for paragraph in paragraphs:
         if select(paragraph):
             temp.append(paragraph)
+    """      
+    temp = [paragraph for paragraph in paragraphs if select(paragraph)]
     
     if k >= len(temp):
         return ""
@@ -61,15 +63,14 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     def compare(string):
-        string = string.split(' ')
-        # string = split(string)
-        for word in string:
+        # string = string.split(' ')
+        string = split(remove_punctuation(lower(string)))
+        for word in string:            
             for compare in topic:
-                temp = ''.join(x for x in word if x.isalnum()) # remove the special characters, try to use remove_punctuation
-                if temp.lower() == compare:
+                # temp = ''.join(x for x in word if x.isalnum())  # remove special characters
+                if word == compare:
                     return True
         return False
-            
     
     return compare    
     # END PROBLEM 2
@@ -186,7 +187,7 @@ def autocorrect(typed_word, valid_words, diff_function, limit):
     
     diff = []
     for word in valid_words:
-        if word == typed_word:
+        `if word == typed_word:
             return word
         
         diff.append(diff_function(typed_word, word, limit))
@@ -258,26 +259,28 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-
-    if ______________:  # Fill in the condition
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-
-    elif ___________:  # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    if start == goal:
+        return 0
+    
+    if limit == 0:
+        return 9999
+    
+    elif not start or not goal: 
+        return abs(len(start) - len(goal))
+    
+    elif start[0] == goal[0]:
+        return minimum_mewtations(start[1:], goal[1:], limit)
 
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = minimum_mewtations(start, goal[1:], limit - 1)
+        remove = minimum_mewtations(start[1:], goal, limit - 1)
+        substitute = minimum_mewtations(start[1:], goal[1:], limit - 1)
+        
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        
+        return min(add, remove, substitute) + 1
+        
         # END
-
 
 def final_diff(start, goal, limit):
     """A diff function that takes in a string START, a string GOAL, and a number LIMIT.
