@@ -187,7 +187,7 @@ def autocorrect(typed_word, valid_words, diff_function, limit):
     
     diff = []
     for word in valid_words:
-        `if word == typed_word:
+        if word == typed_word:
             return word
         
         diff.append(diff_function(typed_word, word, limit))
@@ -320,7 +320,30 @@ def report_progress(sofar, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+
+    """ floating point problem
+    for i in range(len(sofar)):
+        if sofar[i] != prompt[i]:
+            acc = round(1 - (len(prompt) - i) / len(prompt), 15)
+            upload({'id': user_id, 'progress': acc})
+            return acc
+            
+
+    acc = round(1 - (len(prompt) - len(sofar)) / len(prompt), 15)
+    upload({'id': user_id, 'progress': acc})
+    return acc  """  
+    
+    acc = 0
+    for i in range(len(sofar)):
+        if sofar[i] == prompt[i]:
+            acc += 1
+        else:
+            break
+            
+    acc /= len(prompt)
+    upload({'id': user_id, 'progress': acc})
+    return acc
+
     # END PROBLEM 8
 
 
