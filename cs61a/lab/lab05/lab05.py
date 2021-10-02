@@ -233,12 +233,28 @@ def sprout_leaves(t, leaves):
           2
     """
     "*** YOUR CODE HERE ***"
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    if not is_leaf(t):
+        return tree(label(t), [sprout_leaves(b, leaves) for b in branches(t)])
+=======
+>>>>>>> Stashed changes
     
     if not is_leaf(t):
         return tree(label(t), [sprout_leaves(b, leaves) for b in branches(t)])
     
+<<<<<<< Updated upstream
     else:
         return tree(label(t), [tree(leaf) for leaf in leaves])
+=======
+>>>>>>> main
+    else:
+        return tree(label(t), [tree(leaf) for leaf in leaves])
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 # Abstraction tests for sprout_leaves and berry_finder
 
