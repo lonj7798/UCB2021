@@ -182,6 +182,39 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    
+    def inner_func(m):
+        if is_planet(end(left(m))) and is_planet(end(right(m))): # left: palent / right: planet
+            left_sum = size(end(left(m)))
+            right_sum = size(end(right(m)))
+            total_sum = left_sum + right_sum
+            
+            return tree(total_sum, [tree(left_sum), tree(right_sum)])
+
+        elif is_planet(end(left(m))) and is_mobile(end(right(m))): # left: planet / right: mobile
+            left_sum = size(end(left(m)))
+            right_tree = inner_func(end(right(m))) # mobile
+            total_sum = left_sum + label(right_tree)
+            
+            return tree(total_sum, [tree(left_sum), right_tree])            
+
+        elif is_mobile(end(left(m))) and is_planet(end(right(m))): # left: planet / right: mobile
+            left_tree = inner_func(end(left(m))) # mobile
+            right_sum = size(end(right(m)))
+            total_sum = label(left_tree) + right_sum
+            
+            return tree(total_sum, [left_tree, tree(right_sum)])
+
+        else: # left: mobile / right: mobileleft_total = inner_func(end(left(m)))
+            left_tree = inner_func(end(left(m)))
+            right_tree = inner_func(end(right(m))) # mobile
+            total_sum = label(left_tree) + label(right_tree)
+            
+            return tree(total_sum, [left_tree, right_tree])
+        
+    anw_tree = inner_func(m)
+    
+    return anw_tree
 
 
 def replace_loki_at_leaf(t, lokis_replacement):
