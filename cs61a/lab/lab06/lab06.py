@@ -29,15 +29,17 @@ def insert_items(lst, entry, elem):
     """
     "*** YOUR CODE HERE ***"  
     
-    temp = []
+    temp_lst = lst.copy()
+    temp = lst
+    temp.clear()
     
-    for i in lst:
+    for i in temp_lst:
         temp.append(i)
         if i == entry:
             temp.append(elem)
             
-    return temp
-
+    lst = temp
+    return lst
 
 def count_occurrences(t, n, x):
     """Return the number of times that x appears in the first n elements of iterator t.
@@ -95,3 +97,18 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    
+    prev = next(t)
+    count = k - 1
+    
+    for i in t:
+        
+        if prev == i:
+            count -= 1
+        else:
+            prev = i
+            count = k - 1
+            
+        if count == 0:
+            return prev
+    return None
