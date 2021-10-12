@@ -24,6 +24,9 @@ class Card:
         500
         """
         "*** YOUR CODE HERE ***"
+        self.name = name
+        self.attack = attack
+        self.defense = defense
 
     def power(self, opponent_card):
         """
@@ -42,6 +45,8 @@ class Card:
         50.0
         """
         "*** YOUR CODE HERE ***"
+        
+        return self.attack - opponent_card.defense / 2
 
     def effect(self, opponent_card, player, opponent):
         """
