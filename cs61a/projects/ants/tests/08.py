@@ -138,14 +138,12 @@ test = {
           >>> place.add_insect(bodyguard)  # Bodyguard in place first
           >>> place.add_insect(other_ant)
           >>> place.ant is bodyguard
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
+          True
           >>> bodyguard.ant_contained is other_ant
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
+          True
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
@@ -156,18 +154,15 @@ test = {
           >>> place = gamestate.places['tunnel_0_0']
           >>> place.add_insect(other_ant)  # Other ant in place first
           >>> place.ant is other_ant
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
+          True
           >>> place.add_insect(bodyguard)
           >>> place.ant is bodyguard
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
+          True
           >>> bodyguard.ant_contained is other_ant
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
+          True
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
