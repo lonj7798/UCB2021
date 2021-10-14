@@ -326,6 +326,7 @@ class FireAnt(Ant):
 
 # BEGIN Problem 6
 # The WallAnt class
+
 class WallAnt(Ant):
     
     name = 'Wall'
@@ -340,15 +341,36 @@ class WallAnt(Ant):
     
 # BEGIN Problem 7
 # The HungryAnt Class
+
 class HungryAnt(Ant):
     chew_duration = 3
     food_cost = 4
     implemented = True
     name = 'Hungry'
-    chew_countdown = 0
     
-    def action(gamestate):
-        print(a)
+    def __init__(self, health=1):
+        super().__init__(health)
+        self.chew_countdown = 0
+    
+    def action(self, gamestate):
+        # eat / not eat(no bees, chew_duration)
+        
+        if self.chew_countdown == self.chew_duration + 1:
+            self.chew_countdown = 0
+        
+        copy_bees = self.place.bees[:]
+        
+        if copy_bees:
+            if self.chew_countdown == 0:
+                bee = random_bee(copy_bees)
+                bee.reduce_health(bee.health)
+            self.chew_countdown += 1 
+                    
+            
+        else:
+            if self.chew_countdown != 0:
+                selflchew_countdown += 1
+            
         
 # END Problem 7
 
@@ -403,6 +425,8 @@ class BodyguardAnt(ContainerAnt):
     # BEGIN Problem 8
     implemented = False   # Change to True to view in the GUI
     # END Problem 8
+    
+    
 
 # BEGIN Problem 9
 # The TankAnt class
