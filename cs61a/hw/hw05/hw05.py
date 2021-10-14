@@ -22,25 +22,29 @@ def gen_perms(seq):
     """
     "*** YOUR CODE HERE ***"
     
+    temp = []
+    for i in seq:
+        temp.append(i)
+    
     if len(seq) == 1:
-        yield seq[:]
+        yield temp[:]
         
     else:
-        yield seq[:]
-        result = [seq[:]]
-        ch = [0] * len(seq)
+        yield temp[:]
+        result = [temp[:]]
+        ch = [0] * len(temp)
         i = 0
         
-        while i < len(seq):
+        while i < len(temp):
             if ch[i] < i:
                 
                 if i % 2 == 0:
-                    seq[0], seq[i] = seq[i], seq[0]
+                    temp[0], temp[i] = temp[i], temp[0]
                     
                 else:
-                    seq[ch[i]], seq[i] = seq[i], seq[ch[i]]
+                    temp[ch[i]], temp[i] = temp[i], temp[ch[i]]
                     
-                yield seq[:]
+                yield temp[:]
                 ch[i] += 1
                 i = 0
                 
@@ -85,10 +89,12 @@ def path_yielder(t, value):
 
     "*** YOUR CODE HERE ***"
 
-    for _______________ in _________________:
-        for _______________ in _________________:
-
-            "*** YOUR CODE HERE ***"
+    if t.label == value:
+        yield [value]
+        
+    for branch in t.branches:
+        for path_yield in path_yielder(branch, value):
+            yield [t.label] + path_yield
 
 
 def preorder(t):
@@ -102,7 +108,15 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
-
+    
+    if t.is_leaf(): # end of the tree
+        return [t.label]
+    
+    anw = [t.label]
+    for branch in t.branches:
+        anw.extend(preorder(branch))
+        
+    return anw
 
 def generate_preorder(t):
     """Yield the entries in this tree in the order that they
@@ -116,6 +130,12 @@ def generate_preorder(t):
     [2, 3, 4, 5, 6, 7]
     """
     "*** YOUR CODE HERE ***"
+    yield t.label
+    
+    if t.branches:
+        for branch in t.branches:
+            yield from generate_preorder(branch)
+        
 
 
 def remainders_generator(m):
