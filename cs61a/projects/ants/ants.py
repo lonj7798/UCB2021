@@ -513,6 +513,8 @@ class ScubaThrower(ThrowerAnt):
     food_cost = 6
     implemented = True
     
+    def __init__(self, health = 1):
+        super().__init__(health)    
 
 # END Problem 11
 
@@ -529,9 +531,11 @@ class QueenAnt(ScubaThrower):  # You should change this line
     # BEGIN Problem 12
     implemented = True   # Change to True to view in the GUI
     damage = 2
-    is_queen = False
+    is_queen = True
+        
     # END Problem 12
 
+    
     @classmethod
     def construct(cls, gamestate):
         """
@@ -540,9 +544,11 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         
-        if not cls.is_queen:
-            super().construct(gamestate)
-            cls.is_queen = True
+        if cls.is_queen:
+            print('hey')
+            super(ScubaThrower, cls).construct(gamestate)
+            cls.is_queen = False
+            
         else:
             return 
         # END Problem 12
@@ -554,23 +560,24 @@ class QueenAnt(ScubaThrower):  # You should change this line
         # BEGIN Problem 12
         
         # throwwwwwwww
+        super().action(gamestate)
         
-        if is_queen:
-            super().action(gamestate)
-            def searching(self, searching_place):
-                if not searching_place:
-                    return None
+        def searching(self, searching_place):
+            if not searching_place:
+                return None
 
-                if searching_place.ant:
-                    searching_place.ant.buff(searching_place.ant)
+            if searching_place.ant:
+                searching_place.ant.buff(searching_place.ant)
 
-                if searching_place.ant.ant_container:
-                    if searching_place.ant.ant_contained:
-                        searching_place.ant.ant_contained.buff(searching_place.ant.ant_contained)
+            if searching_place.ant.ant_container:
+                if searching_place.ant.ant_contained:
+                    searching_place.ant.ant_contained.buff(searching_place.ant.ant_contained)
 
-                return searching(self, searching_place.exit)
+            return searching(self, searching_place.exit)
 
-            searching(self.place.exit)
+        searching(self.place.exit)
+        if not is_queen:
+            Insect.reduce_health(self, 1)
         # END Problem 12
 
     def reduce_health(self, amount):
@@ -583,7 +590,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
             self.health -= amount
             if self.health <= 0:
                 ants_lose()
-
+                
         # END Problem 12
 
 
