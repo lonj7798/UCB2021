@@ -109,6 +109,7 @@ class Ant(Insect):
     food_cost = 0 # default -> override
     is_container = False
     double_double = False
+    is_queen = False
     # ADD CLASS ATTRIBUTES HERE
 
     def __init__(self, health=1):
@@ -163,13 +164,14 @@ class Ant(Insect):
         Insect.add_to(self, place)
 
     def remove_from(self, place):
-        if place.ant is self:
-            place.ant = None
-        elif place.ant is None:
-            assert False, '{0} is not in {1}'.format(self, place)
-        else:
-            place.ant.remove_ant(self)
-        Insect.remove_from(self, place)
+        if not self.is_queen:
+            if place.ant is self:
+                place.ant = None
+            elif place.ant is None:
+                assert False, '{0} is not in {1}'.format(self, place)
+            else:
+                place.ant.remove_ant(self)
+            Insect.remove_from(self, place)
 
     def buff(self):
         """Double this ants's damage, if it has not already been buffed."""
@@ -530,8 +532,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 12
     implemented = True   # Change to True to view in the GUI
-    damage = 2
-    is_queen = True
+    damage = 1
         
     # END Problem 12
 
@@ -544,10 +545,10 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         
-        if cls.is_queen:
-            print('hey')
-            super(ScubaThrower, cls).construct(gamestate)
-            cls.is_queen = False
+        if not gamestate.exist_queen:
+            gamestate.exist_queen = True
+            cls.is_queen = True
+            return super().construct(gamestate)
             
         else:
             return 
@@ -559,25 +560,19 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         
-        # throwwwwwwww
-        super().action(gamestate)
+        ThrowerAnt.action(self, gamestate)
+        searching = self.place.exit
         
-        def searching(self, searching_place):
-            if not searching_place:
-                return None
-
-            if searching_place.ant:
-                searching_place.ant.buff(searching_place.ant)
-
-            if searching_place.ant.ant_container:
-                if searching_place.ant.ant_contained:
-                    searching_place.ant.ant_contained.buff(searching_place.ant.ant_contained)
-
-            return searching(self, searching_place.exit)
-
-        searching(self.place.exit)
-        if not is_queen:
-            Insect.reduce_health(self, 1)
+        while searching:
+            if searching.ant:
+                if searching.ant.is_container:
+                    Ant.buff(searching.ant)
+                    if searching.ant.ant_contained:
+                        Ant.buff(searching.ant.ant_contained)
+                else:
+                    Ant.buff(searching.ant)
+                    
+            searching = searching.exit
         # END Problem 12
 
     def reduce_health(self, amount):
@@ -586,10 +581,9 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         
-        if is_queen:
-            self.health -= amount
-            if self.health <= 0:
-                ants_lose()
+        self.health -= amount
+        if self.health <= 0:
+            ants_lose()
                 
         # END Problem 12
 
@@ -842,7 +836,7 @@ class GameState:
     places -- A list of all places in the colony (including a Hive)
     bee_entrances -- A list of places that bees can enter
     """
-
+    
     def __init__(self, strategy, beehive, ant_types, create_places, dimensions, food=2):
         """Create an GameState for simulating a game.
 
@@ -861,6 +855,8 @@ class GameState:
         self.dimensions = dimensions
         self.active_bees = []
         self.configure(beehive, create_places)
+        # prob 12
+        self.exist_queen = False
 
     def configure(self, beehive, create_places):
         """Configure the places in the colony."""
@@ -1042,3 +1038,5 @@ class AssaultPlan(dict):
     def all_bees(self):
         """Place all Bees in the beehive and return the list of Bees."""
         return [bee for wave in self.values() for bee in wave]
+
+
