@@ -605,7 +605,13 @@ class Bee(Insect):
     damage = 1
     # OVERRIDE CLASS ATTRIBUTES HERE
     is_waterproof = True # prob 10
-
+    
+    def __init__(self, health, place=None):
+        super().__init__(health, place)
+        self.slow_time = 0
+        self.scared = False
+        self.scared_time = 0
+    
     def sting(self, ant):
         """Attack an ANT, reducing its health by 1."""
         ant.reduce_health(self.damage)
@@ -630,11 +636,45 @@ class Bee(Insect):
         """
         destination = self.place.exit
 
-        # Extra credit: Special handling for bee direction
-        if self.blocked():
-            self.sting(self.place.ant)
-        elif self.health > 0 and destination is not None:
-            self.move_to(destination)
+        # Extra credit: Special handling for bee direction'
+        
+        # ScaryThrower
+        if self.scared_time != 0:
+            if self.blocked():
+                    self.sting(self.place.ant)
+            
+            if self.slow_time > 0:
+                self.slow_time -= 1
+            
+            
+            if (self.slow_time == 0) or not gamestate.time % 2:
+                if self.place.entrance.is_hive:
+                    self.scared_time -= 1
+                else:
+                    self.move_to(self.place.entrance)
+                    self.scared_time -= 1
+                    # do nothing
+          #  if self.scared_time == 0:
+          #      self.slow_time = 0
+                
+        # ScaryThrower
+        
+        # SlowThrower / Extra
+        else: 
+            if self.slow_time > 0:
+                self.slow_time -= 1
+                if not gamestate.time % 2:
+            # SlowThrower_bee / Extra
+
+                    if self.blocked():
+                        self.sting(self.place.ant)
+                    elif self.health > 0 and destination is not None:
+                        self.move_to(destination)
+            else:
+                if self.blocked():
+                    self.sting(self.place.ant)
+                elif self.health > 0 and destination is not None:
+                    self.move_to(destination)
 
     def add_to(self, place):
         place.bees.append(self)
@@ -648,6 +688,10 @@ class Bee(Insect):
         """Slow the bee for a further LENGTH turns."""
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        if self.slow_time:
+            self.slow_time += length
+        else:
+            self.slow_time = length
         # END Problem EC
 
     def scare(self, length):
@@ -657,6 +701,9 @@ class Bee(Insect):
         """
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        if not self.scared:
+            self.scared_time = length
+            self.scared = True
         # END Problem EC
 
 
@@ -693,7 +740,7 @@ class SlowThrower(ThrowerAnt):
     name = 'Slow'
     food_cost = 4
     # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC
 
     def throw_at(self, target):
@@ -707,12 +754,13 @@ class ScaryThrower(ThrowerAnt):
     name = 'Scary'
     food_cost = 6
     # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC
 
     def throw_at(self, target):
         # BEGIN Problem EC
-        "*** YOUR CODE HERE ***"
+        if target:
+            target.scare(2)
         # END Problem EC
 
 
@@ -1038,5 +1086,3 @@ class AssaultPlan(dict):
     def all_bees(self):
         """Place all Bees in the beehive and return the list of Bees."""
         return [bee for wave in self.values() for bee in wave]
-
-
