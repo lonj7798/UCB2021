@@ -30,21 +30,16 @@ class Frame:
     def define(self, symbol, value):
         """Define Scheme SYMBOL to have VALUE."""
         # BEGIN PROBLEM 1
-        "*** YOUR CODE HERE ***"
-        
-        self.bindings[symbol] = value # using dictionary
+        self.bindings[symbol] = value
         # END PROBLEM 1
 
     def lookup(self, symbol):
         """Return the value bound to SYMBOL. Errors if SYMBOL is not found."""
         # BEGIN PROBLEM 1
-        "*** YOUR CODE HERE ***"
-        
         if symbol in self.bindings:
-            return self.bindings[symbol]
+            return self.bindings[symbol] 
         elif self.parent:
             return self.parent.lookup(symbol)
-        
         # END PROBLEM 1
         raise SchemeError('unknown identifier: {0}'.format(symbol))
 
@@ -64,9 +59,14 @@ class Frame:
             raise SchemeError('Incorrect number of arguments to function call')
         # BEGIN PROBLEM 8
         "*** YOUR CODE HERE ***"
+        var = Frame(self) #making new frame
+        while formals !=  nil and vals != nil:
+            var.define(formals.first, vals.first) #첫번째는 a에 1넣고, 그다음은 b에 2 넣고 c에는 3 넣는다. 총 세번 돌아감. 
+            formals,vals = formals.rest, vals.rest
+        return var #return new frame
         # END PROBLEM 8
 
-##############
+##############  
 # Procedures #
 ##############
 
