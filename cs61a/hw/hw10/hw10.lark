@@ -1,6 +1,15 @@
 rstring: "r\"" regex* "\""
 
-?regex: character | word
+?regex: character | word | group | pipe | quant | range | class
+group: "(" regex ")"
+pipe: regex "|" regex
+range: (LETTER "-" LETTER) | (NUMBER "-" NUMBER)
+class: "[" (range | character)+ "]"
+?quant: star_quant | num_quant | plus_quant
+?quantifiable: character | class | group
+plus_quant: quantifiable "+"
+star_quant: quantifiable "*"
+num_quant: quantifiable ("{"( NUMBER | (NUMBER?","NUMBER) | (NUMBER","NUMBER?))"}")
 
 character: LETTER | NUMBER
 word: WORD
@@ -9,4 +18,3 @@ word: WORD
 %import common.LETTER
 %import common.NUMBER
 %import common.WORD
-
